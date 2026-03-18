@@ -1,0 +1,8 @@
+.env
+vendor/
+composer.phar
+.docker/
+db_data/
+mysql/
+*.swp
+*.log

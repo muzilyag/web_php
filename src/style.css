@@ -1,0 +1,117 @@
+:root {
+    --main: #b76447;
+    --second: #5f3425;
+    --text: #dcb4a6;
+    --button: #6c0414;
+}
+
+* {
+    margin: 0;
+    box-sizing: border-box;
+    font-family: 'Inter';
+}
+
+body {
+    background-color: var(--main);
+    color: #fff;
+    /* display: flex; */
+    /* align-items: center; */
+    /* justify-content: center; */
+    /* min-height: 100vh; */
+}
+
+.container {
+    margin-top: 32px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.container h2,
+.db_table h2 {
+    font-size: 3rem;
+}
+
+.container form {
+    background-color: var(--second);
+    color: var(--text);
+    display: flex;
+    flex-direction: column;
+    max-width: 700px;
+    gap: 24px;
+    padding: 32px;
+    border-radius: 10px;
+}
+
+.input_field {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.input_field input {
+    padding: 8px;
+    border-radius: 4px;
+    font-size: 1rem;
+}
+
+.input_field label {
+    font-size: 1.5rem;
+    font-weight: 500;
+}
+
+.container button {
+    padding: 16px;
+    font-size: 1rem;
+    border-radius: 10px;
+    background-color: var(--button);
+    color: var(--text);
+    border: none;
+    font-size: 2rem;
+
+    &:hover {
+        transition: 0.5s background-color;
+        background-color: #293b47;;
+    }
+
+    &:active {
+        transition: 0.5s background-color;
+        background-color: var(--main);
+    }
+}
+
+.alert {
+    font-size: 2rem;
+    font-weight: 600;
+}
+
+
+.db_table {
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+}
+
+.db_table table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 32px;
+    background: white;
+    color: black;
+}
+
+.db_table th, 
+.db_table td {
+    border: 1px solid #ddd;
+    padding: 12px;
+    text-align: left;
+}
+
+.db_table th {
+    background-color: #f4f4f4;
+}
+
+.db_table tr:nth-child(even) {
+    background-color: #f9f9f9;
+}
