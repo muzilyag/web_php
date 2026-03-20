@@ -45,7 +45,7 @@
             <div class="input_field">
                 <label>Сроки</label>
                 <div>
-                    <input type="date" name="deadline_start" />
+                    <input type="date" name="deadline_start" placeholder="dd-mm-yyyy"/>
                     <input type="date" name="deadline_finish" />
                 </div>
             </div>
@@ -56,7 +56,15 @@
             <button type="submit">Добавить</button>
         </form>
     </section>
-
+    <section class="filter">
+        <h3>Фильтр проектов</h3>
+        <form action="/" method="GET">
+            <input type="text" name="search_name" placeholder="Название проекта..." value="<?= htmlspecialchars($_GET['search_name'] ?? '') ?>" />
+            <input type="text" name="search_place" placeholder="Место стройки..." value="<?= htmlspecialchars($_GET['search_place'] ?? '') ?>" />
+            <button type="submit">Найти</button>
+            <a href="/">Сбросить</a>
+        </form>
+    </section>
     <section class="db_table">
         <h2>Список проектов в базе данных</h2>
         <?php if (empty($projects)): ?>
@@ -87,7 +95,7 @@
                             <td><?= $project->get_deadline_start() ? $project->get_deadline_start()->format('Y-m-d') : '-' ?></td>
                             <td><?= $project->get_deadline_finish() ? $project->get_deadline_finish()->format('Y-m-d') : '-' ?></td>
                             <td><?= htmlspecialchars($project->get_place()) ?></td>
-                            <td><?= $project->get_created_at()->format('Y-m-d H:i:s') ?></td>
+                            <td><?= $project->get_created_at()->format('d-m-Y H:i:s') ?></td>
                         </tr>
                     <?php endforeach; ?>
                 </tbody>

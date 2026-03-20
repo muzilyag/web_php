@@ -2,7 +2,6 @@
 
 namespace App\Controllers;
 
-use App\Models\Project;
 use Doctrine\ORM\EntityManager;
 
 class ProjectController 
@@ -16,7 +15,18 @@ class ProjectController
 
     public function index() : void 
     {
-        $projects = $this->em->getRepository(Project::class)->findAll();
+        $qb = $this->em->createQueryBuilder();
+        $qb->select('p')->from(\App\Models\Project::class, 'p');
+        $search_name = trim($_GET['search_name'] ?? '');
+        $search_place = trim($_GET['search_place'] ?? '');
+        if(!empty($search_name)) {
+            $qb->andWhere('p.project_name LIKE :name')->setParameter('name', '%' . $search_name . '%');
+        }
+        if(!empty($search_place)) {
+            $qb->andWhere('p.place LIKE :place')->setParameter('place', '%' . $search_place . '%');
+        }
+
+        $projects = $qb->getQuery()->getResult();
         $status = $_GET['status'] ?? '';
 
         $alertMsg = "";
@@ -59,7 +69,7 @@ class ProjectController
             $errors[] = "Не заполнено имя проекта.";
         }
         if (empty($materials)) {
-            $errors[] = "Не выбраны материалы (в списке нужно зажимать Ctrl/Cmd).";
+            $errors[] = "Не выбраны материалы (в списке нужно зажимать Ctrl).";
         }
         if ($workers < 1) {
             $errors[] = "Количество рабочих должно быть 1 или больше (получено: " . var_export($_POST['workers'] ?? '', true) . ").";
@@ -68,7 +78,7 @@ class ProjectController
             $errors[] = "Бюджет не может быть отрицательным.";
         }
         if (empty($deadline_start) || empty($deadline_finish)) {
-            $errors[] = "Не заполнены даты начала или окончания.";
+            $errors[] = "Не заполнены сроки начала или окончания.";
         } elseif (strtotime($deadline_start) >= strtotime($deadline_finish)) {
             $errors[] = "Дата начала ($deadline_start) больше или равна дате конца ($deadline_finish).";
         }
@@ -98,10 +108,10 @@ class ProjectController
 
             header("Location: /?status=success");
             exit();
-        } catch (\Exception $e) {
+        } catch (\Exception $ex) {
             echo "<div style='background: #fff0f0; padding: 20px; border: 1px solid red;'>";
             echo "<h3>Ошибка при сохранении в БД:</h3>";
-            echo "<p>" . $e->getMessage() . "</p>";
+            echo "<p>" . $ex->getMessage() . "</p>";
             echo "<a href='/'>Вернуться назад</a></div>";
             exit();
         }

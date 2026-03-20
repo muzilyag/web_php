@@ -61,7 +61,8 @@ body {
     font-weight: 500;
 }
 
-.container button {
+.container button,
+.filter button {
     padding: 16px;
     font-size: 1rem;
     border-radius: 10px;
@@ -114,4 +115,43 @@ body {
 
 .db_table tr:nth-child(even) {
     background-color: #f9f9f9;
+}
+
+.filter {
+    background: var(--second);
+    padding: 15px;
+    border-radius: 8px;
+    margin: 20px 0;
+    border: 1px solid #ddd;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    max-width: 700px;
+}
+
+.filter h3 {
+    color: var(--text);
+    font-size: 1.5rem;
+}
+
+.filter form {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+}
+
+.filter input {
+    border-radius: 4px;
+    padding: 6px;
+}
+
+.filter button {
+    font-size: 1rem;
+}
+
+.filter a {
+    text-decoration: none;
+    color: var(--main);
+    font-weight: bold;
 }
