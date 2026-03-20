@@ -1,124 +1,27 @@
 <?php
-require_once __DIR__ . '/bootstrap.php';
 
-$status = $_GET['status'] ?? '';
-$alertMsg = "";
-$alertClass = "";
+require_once __DIR__ . "/bootstrap.php";
 
-if ($status === 'success') {
-    $alertMsg = "Проект добавлен в реестр";
-    $alertClass = "success";
-} elseif ($status === 'error') {
-    $alertMsg = "Ошибка при добавлении проекта";
-    $alertClass = "error";
-}
+use App\Container;
+use App\Router;
+use App\Controllers\ProjectController;
+use Doctrine\ORM\EntityManager;
 
-try {
-    $dql = "SELECT p FROM App\Entity\Project p ORDER BY p.id ASC";
-    $query = $entityManager->createQuery($dql);
-    $projects = $query->getResult();
-} catch (\Exception $ex) {
-    die("Failed to load from data base" . $ex->getMessage());
-}
+$container = new Container();
+
+$container->set(EntityManager::class, function () use ($entityManager) {
+    return $entityManager;
+});
+
+$container->set(ProjectController::class, function (Container $c) {
+    return new ProjectController($c->get(EntityManager::class));
+});
+
+$router = new Router($container);
+
+$router->add('GET', '/', [ProjectController::class, 'index']);
+$router->add('POST', '/add', [ProjectController::class, 'store']);
+
+$router->dispatch($_SERVER['REQUEST_METHOD'], $_SERVER['REQUEST_URI']);
 
 ?>
-
-<!DOCTYPE html>
-<html lang="ru">
-
-<head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>LR_WEB</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="style.css" />
-</head>
-
-<body>
-    <section class="container">
-        <?php if ($alertMsg): ?>
-            <div class="alert <?= $alertClass ?>">
-                <?= $alertMsg ?>
-            </div>
-        <?php endif; ?>
-
-        <form action="process.php" method="POST">
-            <h2>Строительный проект</h2>
-            <div class="input_field">
-                <label>Имя проекта</label>
-                <input type="text" name="project_name" placeholder="Название объекта" required />
-            </div>
-            <div class="input_field">
-                <label>Материалы</label>
-                <select name="materials[]" multiple size="4">
-                    <option value="concrete">Бетон</option>
-                    <option value="brick">Кирпич</option>
-                    <option value="iron">Железо</option>
-                    <option value="wood">Дерево</option>
-                </select>
-            </div>
-            <div class="input_field">
-                <label>Кол-во рабочих</label>
-                <input type="number" name="workers_count" placeholder="100" required />
-            </div>
-            <div class="input_field">
-                <label>Бюджет</label>
-                <input type="number" step="0.1" name="budget" placeholder="100000" required />
-            </div>
-            <div class="input_field">
-                <label>Сроки</label>
-                <div>
-                    <input type="date" name="deadline_start" />
-                    <input type="date" name="deadline_finish" />
-                </div>
-            </div>
-            <div class="input_field">
-                <label>Расположение</label>
-                <input type="text" name="place" required />
-            </div>
-            <button type="submit">Добавить</button>
-        </form>
-    </section>
-
-    <section class="db_table">
-        <h2>Список проектов в базе данных</h2>
-        <?php if (empty($projects)): ?>
-            <p>Записей пока нет</p>
-        <?php else: ?>
-            <table>
-                <thead>
-                    <tr>
-                        <th>ID</th>
-                        <th>Название</th>
-                        <th>Материалы</th>
-                        <th>Рабочие</th>
-                        <th>Бюджет</th>
-                        <th>Начало работ</th>
-                        <th>Конец работ</th>
-                        <th>Место</th>
-                        <th>Время добавления записи</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <?php foreach ($projects as $project): ?>
-                        <tr>
-                            <td><?= $project->get_id() ?></td>
-                            <td><?= htmlspecialchars($project->get_project_name()) ?></td>
-                            <td><?= htmlspecialchars($project->get_materials()) ?></td>
-                            <td><?= htmlspecialchars($project->get_workers_count()) ?></td>
-                            <td><?= number_format((float)$project->get_budget(), 2, '.', ' ') ?> руб</td>
-                            <td><?= $project->get_deadline_start() ? $project->get_deadline_start()->format('Y-m-d') : '-' ?></td>
-                            <td><?= $project->get_deadline_finish() ? $project->get_deadline_finish()->format('Y-m-d') : '-' ?></td>
-                            <td><?= htmlspecialchars($project->get_place()) ?></td>
-                            <td><?= $project->get_created_at()->format('Y-m-d H:i:s') ?></td>
-                        </tr>
-                    <?php endforeach; ?>
-                </tbody>
-            </table>
-        <?php endif; ?>
-    </section>
-</body>
-
-</html>

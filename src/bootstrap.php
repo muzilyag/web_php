@@ -6,7 +6,7 @@ use Doctrine\DBAL\DriverManager;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\ORMSetup;
 
-$paths = [__DIR__ . '/src/Entity'];
+$paths = [__DIR__ . '/Models'];
 $isDevMode = true;
 
 $config = ORMSetup::createAttributeMetadataConfiguration($paths, $isDevMode);
