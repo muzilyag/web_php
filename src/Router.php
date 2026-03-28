@@ -60,12 +60,6 @@ class Router
             $controller->$action();
             return;
         }
-        echo "<div style='background: #fff0f0; padding: 20px; border: 1px solid red; font-family: sans-serif;'>";
-        echo "<h3>Страница не найдена! (Ошибка Роутера)</h3>";
-        echo "<p><b>Пришел метод:</b> " . htmlspecialchars($method) . "</p>";
-        echo "<p><b>Очищенный путь:</b> '" . htmlspecialchars($path) . "'</p>";
-        echo "<p><b>Оригинальный URI:</b> '" . htmlspecialchars($uri) . "'</p>";
-        echo "<hr><p><b>Что ждет Роутер:</b></p><pre>";
         print_r($this->routes);
         http_response_code(404);
         echo "Страница не найдена! 404";

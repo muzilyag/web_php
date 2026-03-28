@@ -4,7 +4,6 @@ namespace App\Models;
 
 use Doctrine\ORM\Mapping as ORM;
 use DateTimeImmutable;
-use Doctrine\DBAL\Types\DecimalType;
 
 #[ORM\Entity]
 #[ORM\Table(name: 'projects')]

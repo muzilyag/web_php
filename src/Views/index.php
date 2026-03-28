@@ -8,7 +8,10 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
     <link rel="stylesheet" href="/style.css" />
+    
 </head>
 
 <body>
@@ -49,9 +52,12 @@
                     <input type="date" name="deadline_finish" />
                 </div>
             </div>
-            <div class="input_field">
-                <label>Расположение</label>
-                <input type="text" name="place" required />
+            <div class="input_field input_map">
+                <div> 
+                    <label>Расположение</label>
+                    <input type="text" name="place" id="place_input" placeholder="Город, улица или координаты" />
+                </div>
+                <div id="map"></div>            
             </div>
             <button type="submit">Добавить</button>
         </form>
@@ -102,6 +108,7 @@
             </table>
         <?php endif; ?>
     </section>
+    <script src="/map.js"></script>
 </body>
 
 </html>
