@@ -21,7 +21,10 @@
                 <?= $alertMsg ?>
             </div>
         <?php endif; ?>
-
+        <div style="text-align: right; padding: 10px; color: var(--text);"> 
+            Вы вошли как: <b><?= htmlspecialchars($_SESSION['username'] ?? '') ?></b> (Роль: <?= htmlspecialchars($_SESSION['role'] ?? '') ?>) | 
+        <a href="/logout" style="color: var(--button); font-weight: bold;">Выйти</a>
+        </div>
         <form action="/index.php/add" method="POST">
             <h2>Строительный проект</h2>
             <div class="input_field">

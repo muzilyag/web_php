@@ -15,6 +15,11 @@ class ProjectController
 
     public function index() : void 
     {
+        if (!isset($_SESSION['user_id'])) {
+            header("Location: /login");
+            exit();
+        }
+
         $qb = $this->em->createQueryBuilder();
         $qb->select('p')->from(\App\Models\Project::class, 'p');
         $search_name = trim($_GET['search_name'] ?? '');
@@ -47,6 +52,11 @@ class ProjectController
     {
         if($_SERVER['REQUEST_METHOD'] !== 'POST') {
             header("Location: /");
+            exit();
+        }
+
+        if (!isset($_SESSION['user_id'])) {
+            header("Location: /login");
             exit();
         }
 
